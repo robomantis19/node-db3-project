@@ -50,9 +50,11 @@ router.get('/:id/steps', (req, res) => {
 
 router.post('/', (req, res) => {
   const schemeData = req.body;
-
+  console.log(schemeData);
   Schemes.add(schemeData)
+
   .then(scheme => {
+    console.log(scheme)
     res.status(201).json(scheme);
   })
   .catch (err => {
@@ -84,13 +86,11 @@ router.put('/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  Schemes.findById(id)
+
+  Schemes.myupdate(id, changes)
   .then(scheme => {
     if (scheme) {
-      Schemes.update(changes, id)
-      .then(updatedScheme => {
-        res.json(updatedScheme);
-      });
+        res.status(200).json(scheme);
     } else {
       res.status(404).json({ message: 'Could not find scheme with given id' });
     }
@@ -103,7 +103,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
 
-  Schemes.remove(id)
+  Schemes.myremove(id)
   .then(deleted => {
     if (deleted) {
       res.json({ removed: deleted });
